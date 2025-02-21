@@ -34,7 +34,7 @@ export const Transaction = () => {
             :
             <CreateTransactionalKey/>
         }
-        {/* <RequestDebit/> */}
+        <RequestDebit/>
     </>
   )
 }

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { RouteUser } from './features/user/routes/RouteUser'
 import { RouteProduct } from './features/product/routes/RouteProduct'
 import { RouteTransaction } from './features/transaction/routes/RouteTransaction'
+import { NotFound } from './layaout/NotFound'
 
 
 export const App = () => {
@@ -21,7 +22,8 @@ export const App = () => {
             ?
             <>
             <Route path='/' element={<Heading/>} />
-            <Route path='/*' element={<Navigate to={'/'}/>} />
+            <Route path='/*' element={<Navigate to={'/product/product_search'}/>} />
+            {/* <Route path='/*' element={<NotFound/>}/> */}
               {
                 user.is_superuser
                 ?
@@ -39,7 +41,8 @@ export const App = () => {
             <>
             <Route path='/' element={<Heading/>} />
             <Route path='auth/*' element={<RouteAuth/>} />
-            <Route path='/*' element={<Navigate to={'/'}/>} />
+            {/* <Route path='/*' element={<Navigate to={'/'}/>} /> */}
+            <Route path='/*' element={<NotFound/>}/>
             </>
           }
           

@@ -8,8 +8,8 @@ export const BaseLayout = ({children}) => {
     const {verifyToken} = useSelector((state) => state.auth_state)
 
     useEffect(() => {
-        dispatch(startVerifyToken());
         dispatch(startRefreshToken());
+        dispatch(startVerifyToken());
     }, [])
 
     useEffect(() => {

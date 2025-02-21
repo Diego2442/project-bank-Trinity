@@ -1,19 +1,20 @@
 import json
+import uuid
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 class DebitRequestConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # El usuario es obtenido de la solicitud WebSocket
-        self.user = self.scope['user']
-        self.room_name = f'debit_room_{self.user.id}'
-        self.room_group_name = f'debit_{self.room_name}'
+        self.user = self.scope['url_route']['kwargs']['user_id']
+        self.room_name = f'debit_room_{self.user}'
+        self.room_group_name = f'{self.room_name}'
 
         # Unirse a un grupo de WebSocket específico para este usuario
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-
+        print(self.channel_name, self.room_group_name, self.user)
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -50,6 +51,9 @@ class DebitRequestConsumer(AsyncWebsocketConsumer):
             # Procesamos la respuesta del cliente (true/false)
             admin_id = data['admin_id']
             response = data['response']  # true o false
+            amount = data['amount']
+            product_id = data['product_id']
+            response_id = str(uuid.uuid4())  # Generamos el ID único
             print(f"Recibiendo respuesta de débito: {response}")
 
             # Enviar respuesta al administrador correspondiente
@@ -59,6 +63,9 @@ class DebitRequestConsumer(AsyncWebsocketConsumer):
                     'type': 'debit_response',
                     'response': response,
                     'admin_id': admin_id,
+                    'amount': amount,
+                    'product_id': product_id,
+                    'response_id': response_id
                 }
             )
             print(f"Enviando respuesta de débito al grupo 'debit_room_{admin_id}'.")
@@ -78,4 +85,7 @@ class DebitRequestConsumer(AsyncWebsocketConsumer):
             'type': 'debit_response',
             'response': event['response'],
             'admin_id': event['admin_id'],
+            'amount':   event['amount'],
+            'product_id': event['product_id'],
+            'response_id': event['response_id']
         }))

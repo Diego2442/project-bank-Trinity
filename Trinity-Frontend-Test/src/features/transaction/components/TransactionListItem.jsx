@@ -1,7 +1,9 @@
 import React from 'react'
 import { formatNumber } from '../../product/functions/formatNumber';
+import { formatDate } from '../functions/formatDate';
 
 export const TransactionListItem = ({transaction}) => {
+    const dateformatt = formatDate(transaction.date_time)
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
             <td className="w-4 p-4">
@@ -44,6 +46,9 @@ export const TransactionListItem = ({transaction}) => {
             <td className="px-6 py-4">{formatNumber(transaction.amount)}</td>
             <td className="px-6 py-4 space-x-4">
                 {transaction.product_receive}
+            </td>
+            <td>
+                {dateformatt}
             </td>
             
           </tr>

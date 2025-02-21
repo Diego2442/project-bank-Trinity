@@ -63,7 +63,7 @@ export const startSearchProductByCustomer = (customer_document) => {
 
         try {
             const res = await productApi.get(`list_products_by_user/${customer_document}`, config)
-            console.log(res)
+            //console.log(res)
             
             //Buscar el campo user, dentro de los objetos que estan en el arreglo
             const user_found = res.data.find(item => item.user)?.user;
@@ -179,8 +179,10 @@ export const startDebitTransaction = (amount, product, transaction_type='debit')
             const res = await transactionApi.post(`create_transaction`, body, config)
             dispatch(restBalance({product_id:product, amount}))
             Swal.fire('Debito exitoso', 'Revisa tú saldo', 'success')
+            return res.status
         } catch (error) {
             Swal.fire('Error en la transaccion', error.response, 'error')
+            console.log(error)
         }
     }
 }

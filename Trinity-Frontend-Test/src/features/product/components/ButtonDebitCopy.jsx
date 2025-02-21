@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
-export const ButtonDebit = ({ product_data }) => {
+export const ButtonDebitCopy = ({ product_data }) => {
   const { user } = useSelector((state) => state.auth_state);
-  const [debitResponse, setDebitResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(0);
   const [modal, setModal] = useState(false);
@@ -20,31 +20,41 @@ export const ButtonDebit = ({ product_data }) => {
   const onSubmit = (event) => {
     event.preventDefault();
     if (amount > 0) {
-      console.log({ amount });
+      //console.log({ amount });
+      sendDebitRequest()
     }
   };
 
   useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:8000/ws/debit_room_${user.id}/`);
-
-    socket.onopen = () => {
+    const newSocket = new WebSocket(`ws://localhost:8000/ws/debit_room_${user.id}/`);
+    
+    newSocket.onopen = () => {
       console.log("Conexión WebSocket establecida.");
     };
-
-    socket.onmessage = (e) => {
+  
+    newSocket.onmessage = (e) => {
       const message = JSON.parse(e.data);
-
+      
       // Si es una respuesta de débito, actualizamos el estado
       if (message.type === "debit_response" && message.admin_id === parseInt(user.id)) {
-        setDebitResponse(message.response);
-        setLoading(false); // Dejamos de mostrar el mensaje de espera
+        
+        if (message.response) {
+          //console.log(message.response_id)
+          setModal(false);
+          setAmount(0);
+          Swal.fire('Correct', "Proccess Success, update user", 'success')
+        } else {
+          Swal.fire("Error", "Cancel debit", "error");
+        }
       }
+      setLoading(false); // Dejamos de mostrar el mensaje de espera
     };
-
-    setSocket(socket); // Guardamos el socket
-
+    
+  
+    setSocket(newSocket); // Guardamos el socket
+  
     return () => {
-      socket.close(); // Cerramos el socket cuando el componente se desmonte
+      newSocket.close(); // Cerramos el socket cuando el componente se desmonte
     };
   }, [user.id]);
 
@@ -119,12 +129,11 @@ export const ButtonDebit = ({ product_data }) => {
               {/* mensajes del sockets */}
               <div>
                 <h1>Administrador</h1>
-                <button onClick={sendDebitRequest}>Enviar Solicitud de Débito</button>
 
                 {loading && <p>Esperando respuesta del cliente...</p>}
-                {debitResponse !== null && (
+                {/* {debitResponse !== null && (
                   <p>Respuesta del cliente: {debitResponse ? "Transacción exitosa" : "Transacción fallida"}</p>
-                )}
+                )} */}
               </div>
               {/* fin de mensajes */}
 
@@ -151,7 +160,7 @@ export const ButtonDebit = ({ product_data }) => {
                   type="submit"
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  Do Deposit
+                  Do Debit
                 </button>
               </form>
             </div>

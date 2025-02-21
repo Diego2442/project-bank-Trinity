@@ -24,6 +24,7 @@ export const ButtonCancel = ({ product_data }) => {
       <button
         className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-600 rounded-lg hover:bg-red-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
         onClick={onClickModal}
+        disabled={product_data.status==='c'}
       >
         Cancel Account
       </button>

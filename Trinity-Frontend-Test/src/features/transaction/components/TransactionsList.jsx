@@ -4,8 +4,8 @@ import { TransactionListItem } from "./TransactionListItem";
 export const TransactionsList = ({ transactions }) => {
   return (
     <>
-        <h2 class="max-w-2xl mx-auto text-2xl font-semibold tracking-tight text-gray-800 xl:text-3xl dark:text-white justify-center content-center text-center mt-12">
-            List your <span class="text-blue-500">Transactions</span>
+        <h2 className="max-w-2xl mx-auto text-2xl font-semibold tracking-tight text-gray-800 xl:text-3xl dark:text-white justify-center content-center text-center mt-12">
+            List your <span className="text-blue-500">Transactions</span>
         </h2>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-12 mx-2">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -15,7 +15,7 @@ export const TransactionsList = ({ transactions }) => {
                 <div className="flex items-center">Transaction ID</div>
               </th>
               <th scope="col" className="px-6 py-3">
-                Número de cuenta
+                Product Send
               </th>
               <th scope="col" className="px-6 py-3">
                 Transaction Type
@@ -28,6 +28,9 @@ export const TransactionsList = ({ transactions }) => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Product Receive
+              </th>
+              <th scope="col" className="px-6 py-3">
+              DateTime
               </th>
             </tr>
           </thead>

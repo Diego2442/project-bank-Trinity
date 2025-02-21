@@ -34,15 +34,19 @@ export const userSlice = createSlice({
             state.products = state.products.map((product) =>
             {
                 if (product.product_id === payload.product_id) {
-                    if (!!product.is_exempt) {
-                        
+                    if (product.is_exempt) {
+                        // Si es exento, solo restamos el monto
+                        const newBalance = (parseFloat(product.balance) - parseFloat(payload.amount)).toFixed(2);
+                        console.log("Nuevo saldo (exento): ", newBalance);
                         return { 
                             ...product, 
                             balance: `${(parseFloat(product.balance) - parseFloat(payload.amount)).toFixed(2)}`
                         };
                     } else {
                        
-                        const deductedAmount = (parseFloat(payload.amount) + parseFloat(payload.amount * 0.04)).toFixed(2); // 4% adicional
+                        const deductedAmount = (parseFloat(payload.amount) * 1.004).toFixed(2); // 4%
+                        //console.log("Monto deducido (con 4%): ", deductedAmount);  // Verifica el monto con el 4% adicional
+                        
                         return { 
                             ...product, 
                             balance: `${(parseFloat(product.balance) - deductedAmount).toFixed(2)}` 
@@ -61,9 +65,16 @@ export const userSlice = createSlice({
                 :product
             ))
         },
+        changeIsExempt: (state, {payload}) => {
+            state.products = state.products.map((product) => (
+                product.product_id === payload.product_id
+                ?{...product, is_exempt: payload.is_exempt}
+                :product
+            ))
+        }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { addUser, addProducts, cleanProducts, cleanUser, addProduct, addBalance, restBalance, cancelProduct } = userSlice.actions;
+export const { addUser, addProducts, cleanProducts, cleanUser, addProduct, addBalance, restBalance, cancelProduct, changeIsExempt } = userSlice.actions;

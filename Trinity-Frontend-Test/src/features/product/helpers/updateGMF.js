@@ -9,8 +9,9 @@ export const updateGMF = async(product_id) => {
     }
     
     try {
-        await apis.productApi.patch(`change_GMF/${product_id}`, {}, config)
+        const res = await apis.productApi.patch(`change_GMF/${product_id}`, {}, config)
         Swal.fire('Success','Actualización exitosa', 'success')
+        return res
     } catch (error) {
         Swal.fire('Error', 'Problemas en la solicitud', 'error')
     }

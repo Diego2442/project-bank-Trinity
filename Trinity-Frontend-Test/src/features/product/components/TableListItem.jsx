@@ -4,11 +4,17 @@ import { ButtonDeposit } from './ButtonDeposit';
 import { ButtonDebit } from './ButtonDebit';
 import { ButtonCancel } from './ButtonCancel';
 import { updateGMF } from '../helpers/updateGMF';
+import { changeIsExempt } from '../../../store/user/userSlice';
+import { useDispatch } from 'react-redux';
+import { ButtonDebitCopy } from './ButtonDebitCopy';
 
 export const TableListItem = ({product}) => {
-
-    const onChange = () => {
-        updateGMF(product.product_id)
+    const dispatch = useDispatch()
+    const onChange = async() => {
+        const res = await updateGMF(product.product_id)
+        if(res.status===200){
+           dispatch(changeIsExempt({product_id:product.product_id, is_exempt:res.data.is_exempt}))
+        }
     }
   return (
     <>
@@ -21,6 +27,7 @@ export const TableListItem = ({product}) => {
                         id="checkbox-table-search-1"
                         type="checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        checked={product.is_exempt?true:false}
                         />
                         <label htmlFor="checkbox-table-search-1" className="sr-only">
                         checkbox
@@ -53,7 +60,8 @@ export const TableListItem = ({product}) => {
             <td className="px-6 py-4">{formatNumber(product.balance)}</td>
             <td className="px-6 py-4 space-x-4">
                 <ButtonDeposit product_data={product} transaction_type={'deposit'}/>
-                <ButtonDebit product_data={product}/>
+                {/* <ButtonDebit product_data={product}/> */}
+                <ButtonDebitCopy product_data={product}/>
             </td>
             <td>
                 <ButtonCancel product_data={product}/>

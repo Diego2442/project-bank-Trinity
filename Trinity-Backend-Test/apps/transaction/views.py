@@ -139,5 +139,5 @@ class ListTransactionByProductAPIView(ListAPIView):
         return Transaction.objects.filter(
              Q(product__product_id=product_id)
             | Q(product_receive__product_id=product_id)
-            ) 
+            ).order_by('-date_time') 
 

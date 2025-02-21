@@ -45,7 +45,7 @@ THIRD_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     #
-    'channels',
+    #'channels',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + MY_APPS + THIRD_APPS
@@ -94,14 +94,14 @@ CHANNEL_LAYERS = {
 }
 
 #Esto pero debo instalar redis pip install channels_redis / sudo apt-get install redis-server o en docker
-""" CHANNEL_LAYERS = {
+CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             "hosts": [('127.0.0.1', 6379)],  # Puerto y dirección de tu servidor Redis
         },
     },
-} """
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
